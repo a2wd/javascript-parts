@@ -45,12 +45,14 @@ notes.push("An object made with prototyping: " +
 	protoPerson.biometrics);
 notes.push("We can also now add properties to a prototype and affect all prototyped children");
 
+//Typeof
 notes.push("We can use typeof to inspect property types, however any property on the prototype chain can produce a value")
 notes.push("typeof person['first-name'] = " + (typeof person['first-name']));
 notes.push("typeof person.biometrics = " + (typeof person.biometrics));
 notes.push("typeof person.nonexistantProperty = " + (typeof person.nonexistantProperty));
 notes.push("typeof person.toString = " + (typeof person.toString));
 
+//Reflection
 notes.push("Check for properties with for in or a for loop")
 notes.push("To ensure ordering, add valus to an array and use a for loop (not for-in)")
 var forNote = "<ul>"
@@ -61,6 +63,18 @@ for(var prop in person) {
 }
 forNote += "</ul>"
 notes.push(forNote)
+
+//Deleting properties
+delete protoPerson.biometrics
+notes.push("Deleting a property allows another from the prototype chain to be used: " + protoPerson.biometrics)
+delete person.biometrics
+notes.push("Deleted biometrics in person: " + protoPerson.biometrics)
+
+//Global objects
+var globalAppObj = globalAppObj || {}
+globalAppObj.person = person
+notes.push("we can use a global object to reduce potential for namespace conflicts: globalAppObj = " + JSON.stringify(globalAppObj))
+
 
 //Write notes to DOM
 notes.forEach(function(el){
