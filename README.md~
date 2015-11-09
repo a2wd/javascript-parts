@@ -10,5 +10,3 @@ This repository consists of a series of worked examples, taken from the respecti
 * Chapter 2: Grammer
 * Chapter 3: Objects
 * Chapter 4: Functions
-
-10/10
