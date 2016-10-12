@@ -80,7 +80,100 @@ notes.push("Eg; var array = [3,4]; var sum = add.apply(null, array) = " + sum);
 var statusObject = { status: '//This is the status object//' };
 notes.push("Also, var statusObject = { status: '//This is the status object//' }; var status = ConstructorInvocationExample.status.apply(statusObject) = " + ConstructorInvocationExample.prototype.getStatus.apply(statusObject));
 
+//Arguments
+var totalSum = function() {
+	var sum = 0;
+	for(var i = 0; i < arguments.length; i++) {
+		sum += arguments[i];
+	}
+	return sum;
+}
+notes.push("Methods are invoked with a <strong>this</strong> variable and an <strong>arguments</strong> variable")
+notes.push("totalSum(1,2,3,4,5) uses the arguments variable to calculate the total: " + totalSum(1,2,3,4,5));
+
+//Return values
+notes.push("Functions always return a value - <em>undefined</em> if nothing else is specified.");
+notes.push("If the function is invoked with <strong>new</strong> and it doesn't return an object, <strong>this</strong> (the new object) is returned")
+
+//Errors
+notes.push("We should use <strong>throw</strong> to throw an Error or custom object when something goes awry. We can use try/catch")
+try {
+throw {"name": "FakeError", "message": "**This is an error example**"}
+}
+catch(e) {
+	notes.push("An error was thrown: " + e.message);
+}
+
+//Augmenting types
+Number.prototype.int = function() {
+	return Math[this < 0 ? "ceil" : "floor"](this);
+}
+var aNumber = (-10/3)
+notes.push("We can augment functions and built in objects, ie adding a .int to Number: (-3/10).int() = " + (-10/3).int());
+
+//Recursion
+notes.push("We can use recursion in JS, which is useful for many problems, and very salient with tree like structures such as the DOM.");
+notes.push("JavaScript does not have tail-call optimisation so deep recursion can fail by exhausting the stack (unless you use trampolining).")
+
+//Scope
+notes.push("JavaScript has function scope not block scope - define variables at the top of the consuming function")
+
+//Closure
+var closureObject = function () {
+	var value = 0;
+	return {
+		increment: function (inc) {
+			value += typeof inc === 'number' ? inc : 1;
+		},
+		getValue: function () {
+			return value;
+		}
+	};
+}();
+notes.push("<strong>Closure</strong> - inner functions get access to parent function variables (except this/arguments).")
+notes.push("closureObject: " + closureObject.getValue() + ", then closureObject.increment(5) and val = " + closureObject.getValue(closureObject.increment(5)) + ". Can't get value: " + closureObject.value)
+notes.push("Another closure is created in the following call to setTimeout which sets the page colour to yellow then fades back to white")
+// Define a function that sets a DOM node's color
+// to yellow and then fades it to white.
+var fade = function (node) {
+	var level = 1;
+	var step = function () {
+		var hex = level.toString(16);
+		node.style.backgroundColor = '#FFFF' + hex + hex;
+		if (level < 15) {
+			level += 1;
+			setTimeout(step, 100);
+		}
+	};
+	setTimeout(step, 100);
+};
+fade(document.body);
+notes.push("It's also important to remember that the variables in the inner function are references to the actual variables - not copies")
+notes.push("This is illustrated in the following add_the_handlers functions which log to the console")
+var add_the_handlers_bad = function (nodes) {
+	var i;
+	for (i = 0; i < nodes.length; i += 1) {
+		nodes[i].onclick = function (e) {
+			console.log("Bad add handlers: " + i);
+		};
+	}
+};
+
+var add_the_handlers_good = function (nodes) {
+	var i;
+	for (i = 0; i < nodes.length; i += 1) {
+		nodes[i].onclick = function (x) {
+			return function (e) {
+				console.log("Good add handlers: " + x);
+			};
+		}(i);
+	}
+};
+
 //Write notes to DOM
 notes.forEach(function(el){
 	document.writeln("<p>" + el + "</p>");
 });
+
+// add_the_handlers_bad(document.getElementsByTagName("p"))
+add_the_handlers_good(document.getElementsByTagName("p"))
