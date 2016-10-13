@@ -170,6 +170,27 @@ var add_the_handlers_good = function (nodes) {
 	}
 };
 
+notes.push("As functions in javascript are first-class members, you can pass them as a parameter to a function to use as a callback")
+notes.push("A modular design can be adopted by making use of closures to hide private variables and just return public variables")
+notes.push("Libraries like jQuery enable <strong>cascading </strong> calls by returning <strong>this</strong> instead of undefined")
+notes.push("We can simulate functional programming style currying with a function override curry method")
+
+var memoizer = function (memo, fundamental) {
+	var shell = function (n) {
+		var result = memo[n];
+		if (typeof result !== 'number') {
+			result = fundamental(shell, n);
+			memo[n] = result;
+		}
+		return result;
+	};
+	return shell;
+};
+var fibonacci = memoizer([0, 1], function (shell, n) {
+ return shell(n - 1) + shell(n - 2);
+});
+notes.push("With recursive functions, like fibonacci and factorial, we can make use of memoization (storing previous values) to save computation")
+
 //Write notes to DOM
 notes.forEach(function(el){
 	document.writeln("<p>" + el + "</p>");
